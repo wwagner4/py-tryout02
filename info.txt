@@ -1,0 +1,6 @@
+pandas Python Data Analysis Library
+numpy
+scipy
+scikit-learn
+spacy
+Tensorflow
