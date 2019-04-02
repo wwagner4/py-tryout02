@@ -1,5 +1,8 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+
+plt.close('all')
 
 s = pd.Series([1, 3, 5, np.nan, 6, 8])
 a = np.array(range(1, 6))
@@ -13,6 +16,6 @@ x = pd.date_range('1/1/2000', periods=10)
 print(x)
 
 s1 = pd.Series(y, x)
-s1.cumsum
-s1.plot
+s1.cumsum()
+s1.plot()
 print("------------------------------------------------------------")
