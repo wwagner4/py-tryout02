@@ -13,8 +13,9 @@ def t1():
 
 
 def t2():
-    n = 100
-    y = np.random.randn(n)
+    plt.style.use("default")
+    n = 10
+    y = np.random.randint(0, 100, n)
     print(y)
     x = pd.date_range('1/1/2000', periods=n)
     print(x)
