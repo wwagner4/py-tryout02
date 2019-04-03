@@ -1,4 +1,4 @@
-pandas Python Data Analysis Library
+pandas: Python Data Analysis Library
 numpy
 scipy
 scikit-learn
