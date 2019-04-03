@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-plt.close('all')
+# plt.close('all')
 
 
 def t1():
@@ -13,13 +13,16 @@ def t1():
 
 
 def t2():
-    y = np.random.randn(10)
+    n = 100
+    y = np.random.randn(n)
     print(y)
-    x = pd.date_range('1/1/2000', periods=10)
+    x = pd.date_range('1/1/2000', periods=n)
     print(x)
     s1 = pd.Series(y, x)
     s1.cumsum()
     s1.plot()
+    plt.show()
+
 
 
 # t1()
