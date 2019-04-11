@@ -1,7 +1,6 @@
 import spacy
-from spacy.lang.de import German
 from spacy.attrs import *
-
+from spacy.lang.de import German
 
 txt = """
 Ihr naht euch wieder, schwankende Gestalten,
