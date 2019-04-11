@@ -24,7 +24,7 @@ _n = 10
 col = 3
 row = math.ceil(_n / col)
 
-fig, axes = plt.subplots(nrows=row, ncols=col)
+fig, axes = plt.subplots(nrows=row, ncols=col, figsize=(12, 15))
 _ij = ij(row, col)
 
 for i, j, vis in ij(_n, col):
