@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+
 def ij(size: int, cols: int) -> Iterable[Tuple[int, int, bool]]:
     rows = math.ceil(size / cols)
 
