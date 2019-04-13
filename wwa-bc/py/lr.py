@@ -1,18 +1,10 @@
 from typing import Dict, List
 
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+# from sklearn.lda import LDA # for older versions
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model.base import LinearClassifierMixin
 import pandas as pd
-
-feature_sets: Dict[str, List[str]] = {
-    "all": ["radius", "texture", "perimeter", "area", "smoothness", "compactness",
-            "concavity", "concave_points", "symmetry", "fractal_dimension"],
-    "most_rel": ["radius", "texture", "compactness", "concavity", "concave_points"],
-    "two_rel": ["radius", "concavity"],
-    "radius": ["radius"],
-}
-
-feature_groups = ["mean", "se", "worst"]
 
 
 def extract_features(d: pd.DataFrame, features_base: List[str], grp: str) -> pd.DataFrame:
@@ -46,11 +38,24 @@ _data_te = _data[:ntest]
 _data_tr = _data[ntest:]
 
 clfs = {
-    "lr1": lambda: LogisticRegression(solver='lbfgs', max_iter=500),
-    "lr2": lambda: LogisticRegression(solver='lbfgs', max_iter=500),
-    "lr3": lambda: LogisticRegression(solver='lbfgs', max_iter=500),
-    "lr4": lambda: LogisticRegression(solver='lbfgs', max_iter=500),
+    "lr": lambda: LogisticRegression(solver='lbfgs', max_iter=500),
+    "lda_1": lambda: LDA(n_components=None, priors=None, shrinkage=None, solver='svd', store_covariance=False,
+                         tol=0.0001),
+    "lda_2": lambda: LDA(n_components=None, priors=None, shrinkage=None, solver='svd', store_covariance=False,
+                         tol=0.001),
+    "lda_3": lambda: LDA(n_components=None, priors=None, shrinkage=None, solver='svd', store_covariance=False,
+                         tol=0.01),
 }
+
+feature_sets: Dict[str, List[str]] = {
+    "all": ["radius", "texture", "perimeter", "area", "smoothness", "compactness",
+            "concavity", "concave_points", "symmetry", "fractal_dimension"],
+    "most_rel": ["radius", "texture", "compactness", "concavity", "concave_points"],
+    "two_rel": ["radius", "concavity"],
+    "radius": ["radius"],
+}
+
+feature_groups = ["mean", "se", "worst"]
 
 for clf_key in clfs:
     for fg in feature_groups:
