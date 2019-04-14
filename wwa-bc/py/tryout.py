@@ -3,6 +3,14 @@ from typing import List, Iterable
 from sklearn import preprocessing as pp
 import pandas as pd
 
+_data = pd.read_csv('../data/result.csv', header=0)
+
+clfs = _data.clf.unique()
+print("clf_all= [{}]".format(", ".join(map(lambda s: "\"{}\"".format(s), clfs))))
+
+fs = _data.features.unique()
+print("fs_all= [{}]".format(", ".join(map(lambda s: "\"{}\"".format(s), fs))))
+
 
 def named_tuples():
     from collections import namedtuple
@@ -27,7 +35,6 @@ def all_combinations():
 
 
 def norm():
-
     def extract_features(d: pd.DataFrame, features: Iterable[str]) -> pd.DataFrame:
         return d[features]
 
@@ -40,8 +47,7 @@ def norm():
     x = pd.DataFrame(d1, columns=cols)
     print(x)
 
-
-norm()
+# norm()
 
 # all_combinations()
 
