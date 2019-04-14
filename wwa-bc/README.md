@@ -99,16 +99,58 @@ Weiters scheint ein Zusammenhang zwischen compactness und concavity zu bestehen.
 * rsquared macht wenig Sinn für Classification Problem
 #### Linear Regression
 Macht wenig Sinn
-#### Logistic Regression
-Verwendete Technologie: sklearn.linear_model.LogisticRegression
+#### Vergleich Classifiers
 
+Verwendete Technologie: sklearn, xgboost
 
-#### LDA
-#### SVM
-#### knn
-#### Naive Bayes
-#### Random Forrest
-#### XGBoost
+Classifier: 
+* LDA 
+* SVM
+* knn
+* Naive Bayes (nm_g)
+* Random Forrest (rf)
+* XGBoost (xgb, gb)
+
+Die Classifier wurden gegen eine Auswahl von Features (Feature Sets) getestet. 
+* all: Alle 
+* se_all: Alle der Gruppe Standard Error (se)
+* se_two_rel: Aus der Gruppe se zwei Relevante (radius, concavity) 
+* worst_most_relevant: Aus der Gruppe worst alle Relevanten (radius, texture, compactness, concavity, concave_points) 
+
+Zur Auswahl des Classifiers wurde die Metrik 'recall' verwendet.
+
+![](images/all_fs.png)
+
+Der Vergleich der Feature Sets zeigt die besten Recall-Werte für 'all' und 'worst_most_rel'. 
+Diese beiden Feature-Sets zeigen etwa gleiche Performance, obwohl si sich stark in der Anzahl der Features 
+unterscheiden.
+
+![](images/all_clf.png)
+
+Der vergleich der Classifier zeigt ähnliches Verhalten für alle Classifier ausser SVM.
+
+![](images/best_clf.png)
+
+Der Vergleich der besten Classifier mit den wirkungsvollsten Feature-Sets zeigt annähernd gleiche Performane. xgb, gb 
+und lda sind den übrigen leicht überlegen.
+
+Eine genauere Analyse mit einer Optimierung diverser Metaparameter sollte für diese drei Classifier durchgeführt werden.
+
+Falls möglich sollte die Anzahl der Trainingsdaten erhöht werden. 
+
+#### Vergleich der Metriken
+
+Verwendete Metriken
+* recall
+* precission
+* f1
+
+![](images/me_recall.png)
+![](images/me_prec.png)
+![](images/me_f1.png)
+
+Der Vergleich der Metriken zeigt annähernd gleiche Werte für alle Metriken. 
+
 
 ## Install XGBoost
  

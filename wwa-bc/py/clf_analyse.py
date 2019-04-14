@@ -50,22 +50,29 @@ def df_filter(df: pd.DataFrame, clfs, fs):
     df_tmp = df.loc[df['clf'].isin(clfs)]
     return df_tmp.loc[df_tmp['features'].isin(fs)]
 
+def df_filter_clf(df: pd.DataFrame, clfs):
+    return df.loc[df['clf'].isin(clfs)]
 
-_data = pd.read_csv('../tmp/result.csv', header=0)
+def df_filter_fs(df: pd.DataFrame, fs):
+    return df.loc[df['features'].isin(fs)]
+
+
+fs_rel = ["worst_most_rel", "all", "se_all", "se_two_rel"]
 
 clf_rel = ["lr", "lda", "nm_g", "xgb", "gb"]
 
-fs_rel = ["worst_all", "worst_most_rel", "all", "all_most_rel"]
+fs_rel1 = ["worst_most_rel", "all"]
 
-clf_rel1 = ["gb", "xgb"]
+clf_rel1 = ["lda", "xgb"]
 
-fs_rel1 = ["worst_all", "worst_most_rel", "all", "all_most_rel"]
+_data = pd.read_csv('../tmp/result.csv', header=0)
 
-_data2 = df_filter(_data, clf_rel, fs_rel)
+_data1 = df_filter_fs(_data, fs_rel)
+_data2 = df_filter(_data, clf_rel, fs_rel1)
 _data3 = df_filter(_data, clf_rel1, fs_rel1)
 
-bar(_data)
-bar(_data2)
+bar(_data1)
+bar(_data2, legend=True, is_fs=False)
 bar(_data3, legend=True, is_fs=False)
 bar(_data3, legend=True, values="precission", is_fs=False)
 bar(_data3, legend=True, values="f1", is_fs=False)
