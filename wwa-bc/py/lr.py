@@ -4,7 +4,7 @@ from typing import Dict, List, Iterable
 import pandas as pd
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as Lda
 # from sklearn.lda import LDA # for older versions
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model.base import LinearClassifierMixin
 import sklearn.model_selection as ms
@@ -110,6 +110,14 @@ clfs = [
             ),
     ClfConf(id="xgb",
             clf=lambda: xgb.XGBClassifier(),
+            normalized=False
+            ),
+    ClfConf(id="gb",
+            clf=lambda: GradientBoostingClassifier(
+                loss='deviance', learning_rate=0.1, n_estimators=100, subsample=1.0, criterion='friedman_mse',
+                min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_depth=3,
+                min_impurity_decrease=0.0, min_impurity_split=None, init=None, random_state=None, max_features=None,
+                verbose=0, max_leaf_nodes=None),
             normalized=False
             ),
 ]
