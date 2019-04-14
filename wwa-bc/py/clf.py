@@ -6,6 +6,8 @@ import pandas as pd
 import sklearn.metrics as me
 import sklearn.model_selection as ms
 import xgboost as xgb
+import os.path as path
+import os as os
 from sklearn import preprocessing as pp
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as Lda
 # from sklearn.lda import LDA # for older versions
@@ -52,7 +54,7 @@ def create_featuresets(
     return feature_sets
 
 
-def train(data: pd.DataFrame, features_key: str, features: Iterable[str], clf_conf: ClfConf):
+def train(data: pd.DataFrame, features_key: str, features: Iterable[str], clf_conf: ClfConf, result_file, sepa):
     def extract_features(d: pd.DataFrame, normalize: bool) -> pd.DataFrame:
         if normalize:
             vals = pp.normalize(d[features], norm='l1')
@@ -81,8 +83,11 @@ def train(data: pd.DataFrame, features_key: str, features: Iterable[str], clf_co
         precission = me.precision_score(y_te, y_pred, average='weighted')
         f1 = me.f1_score(y_te, y_pred, average='weighted')
 
-    print("{:10} {:20} {:10.3f} {:10.3f} {:10.3f}"
-          .format(clf_conf.id, features_key, recall, precission, f1))
+    fnum = "{:.4}"
+    values = [clf_conf.id, features_key, fnum.format(recall), fnum.format(precission), fnum.format(f1)]
+    line = sepa.join(values)
+    print(line)
+    result_file.write(line + "\n")
 
 
 clfs = [
@@ -149,7 +154,18 @@ _data = pd.read_csv('../data/bc-data.csv', header=0)
 
 feature_group_combis = all_combis(feature_groups)
 _feature_sets = create_featuresets(feature_group_combis, feature_selections, len(feature_groups))
+header = ["clf", "features", "recall", "precission", "f1"]
+sepa = ","
 
-for _clf in clfs:
-    for _features_key in _feature_sets.keys():
-        train(_data, _features_key, _feature_sets[_features_key], _clf)
+tdir = "../tmp"
+if ~path.exists(tdir):
+    os.mkdir(tdir)
+fpath = "../tmp/result.csv"
+
+with open(fpath, "w") as rf:
+    rf.write(sepa.join(header) + "\n")
+    for _clf in clfs:
+        for _features_key in _feature_sets.keys():
+            train(_data, _features_key, _feature_sets[_features_key], _clf, rf, sepa)
+
+print("wrote results to:{}".format(path.abspath(fpath)))
