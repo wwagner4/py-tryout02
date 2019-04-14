@@ -75,7 +75,7 @@ def train(data: pd.DataFrame, features_key: str, features: Iterable[str], clf_co
 
     recall = me.recall_score(y_te, y_pred, average='weighted')
 
-    prec_limit = 0.7
+    prec_limit = 0.75
 
     precission = 0.0
     f1 = 0.0
@@ -86,8 +86,14 @@ def train(data: pd.DataFrame, features_key: str, features: Iterable[str], clf_co
     fnum = "{:.4}"
     values = [clf_conf.id, features_key, fnum.format(recall), fnum.format(precission), fnum.format(f1)]
     line = sepa.join(values)
-    print(line)
     result_file.write(line + "\n")
+
+    marker = ""
+    if recall > 0.98:
+        marker = " <<<<"
+    elif recall > 0.95:
+        marker = " <"
+    print("{:10}{:20}{:10.2f}{}".format(clf_conf.id, features_key, recall, marker))
 
 
 clfs = [
@@ -154,18 +160,18 @@ _data = pd.read_csv('../data/bc-data.csv', header=0)
 
 feature_group_combis = all_combis(feature_groups)
 _feature_sets = create_featuresets(feature_group_combis, feature_selections, len(feature_groups))
-header = ["clf", "features", "recall", "precission", "f1"]
-sepa = ","
 
+header = ["clf", "features", "recall", "precission", "f1"]
+_sepa = ","
 tdir = "../tmp"
-if ~path.exists(tdir):
+if not path.exists(tdir):
     os.mkdir(tdir)
 fpath = "../tmp/result.csv"
 
 with open(fpath, "w") as rf:
-    rf.write(sepa.join(header) + "\n")
+    rf.write(_sepa.join(header) + "\n")
     for _clf in clfs:
         for _features_key in _feature_sets.keys():
-            train(_data, _features_key, _feature_sets[_features_key], _clf, rf, sepa)
+            train(_data, _features_key, _feature_sets[_features_key], _clf, rf, _sepa)
 
 print("wrote results to:{}".format(path.abspath(fpath)))
