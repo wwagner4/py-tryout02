@@ -1,19 +1,20 @@
 import itertools as it
+from collections import namedtuple
 from typing import Dict, List, Iterable
 
 import pandas as pd
+import sklearn.metrics as me
+import sklearn.model_selection as ms
+import xgboost as xgb
+from sklearn import preprocessing as pp
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as Lda
 # from sklearn.lda import LDA # for older versions
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model.base import LinearClassifierMixin
-import sklearn.model_selection as ms
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC, SVC
-from sklearn import preprocessing as pp
-from collections import namedtuple
-import xgboost as xgb
 
 ClfConf = namedtuple("ClfConf", "id clf normalized")
 
@@ -54,7 +55,7 @@ def create_featuresets(
 def train(data: pd.DataFrame, features_key: str, features: Iterable[str], clf_conf: ClfConf):
     def extract_features(d: pd.DataFrame, normalize: bool) -> pd.DataFrame:
         if normalize:
-            vals = pp.normalize(d[features])
+            vals = pp.normalize(d[features], norm='l1')
             return pd.DataFrame(vals, columns=features)
         return d[features]
 
@@ -68,8 +69,20 @@ def train(data: pd.DataFrame, features_key: str, features: Iterable[str], clf_co
 
     clf: LinearClassifierMixin = clf_conf.clf().fit(x_tr, y_tr)
 
-    s = clf.score(x_te, y_te)
-    print("{:10} {:20} {:10.3f}".format(clf_conf.id, features_key, s))
+    y_pred = clf.predict(x_te)
+
+    recall = me.recall_score(y_te, y_pred, average='weighted')
+
+    prec_limit = 0.7
+
+    precission = 0.0
+    f1 = 0.0
+    if recall > prec_limit:
+        precission = me.precision_score(y_te, y_pred, average='weighted')
+        f1 = me.f1_score(y_te, y_pred, average='weighted')
+
+    print("{:10} {:20} {:10.3f} {:10.3f} {:10.3f}"
+          .format(clf_conf.id, features_key, recall, precission, f1))
 
 
 clfs = [
