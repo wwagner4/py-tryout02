@@ -4,9 +4,11 @@ from typing import Dict, List, Iterable
 import pandas as pd
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as Lda
 # from sklearn.lda import LDA # for older versions
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model.base import LinearClassifierMixin
 import sklearn.model_selection as ms
+from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC, SVC
 from sklearn import preprocessing as pp
@@ -95,6 +97,14 @@ clfs = [
             ),
     ClfConf(id="knn",
             clf=lambda: KNeighborsClassifier(n_neighbors=3),
+            normalized=False
+            ),
+    ClfConf(id="nm_g",
+            clf=lambda: GaussianNB(),
+            normalized=False
+            ),
+    ClfConf(id="rf",
+            clf=lambda: RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0),
             normalized=False
             ),
 ]
