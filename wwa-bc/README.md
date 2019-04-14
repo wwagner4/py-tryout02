@@ -61,7 +61,7 @@ Falls NAs vorhanden wären könnten:
 * Entsprechende Werte durch den Mittelwert der betroffnen Spalte ersetzt werden.
 
 ### Finden der für die Prediction am Besten geeigneten Features
-####Analysiere die Einzelnen Features in Abhängigkeit zur Klassifizeirung.
+#### Analysiere die Einzelnen Features in Abhängigkeit zur Klassifizeirung.
 
 ![](images/box_mean.png)
 ![](images/box_se.png)
@@ -96,9 +96,11 @@ Auffällig (aber nicht weiter verwunderlich) ist die Korrelation zwischen radius
 Weiters scheint ein Zusammenhang zwischen compactness und concavity zu bestehen.
 
 ### Aufbau folgender Modelle (mit Angabe von rsquared, precision, recall, f1)
+
+Anmerkung: 
 * rsquared macht wenig Sinn für Classification Problem
-#### Linear Regression
-Macht wenig Sinn
+* Linear Regressin wurde nicht untersucht. Macht wenig Sinn für Klassifizierungsproblem
+
 #### Vergleich Classifiers
 
 Verwendete Technologie: sklearn, xgboost
