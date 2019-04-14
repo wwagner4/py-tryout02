@@ -1,5 +1,7 @@
 import itertools as it
-from typing import List
+from typing import List, Iterable
+from sklearn import preprocessing as pp
+import pandas as pd
 
 
 def named_tuples():
@@ -24,8 +26,22 @@ def all_combinations():
         print(c)
 
 
-f = "_".join(["A", "B", "C"])
-print(f)
+def norm():
+
+    def extract_features(d: pd.DataFrame, features: Iterable[str]) -> pd.DataFrame:
+        return d[features]
+
+    data = pd.read_csv('../data/bc-data.csv', header=0)
+    cols = ["radius_mean", "radius_se"]
+    d = extract_features(data, cols)
+
+    d1 = pp.normalize(d)
+    print(d1)
+    x = pd.DataFrame(d1, columns=cols)
+    print(x)
+
+
+norm()
 
 # all_combinations()
 
