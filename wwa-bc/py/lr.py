@@ -5,6 +5,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as Lda
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model.base import LinearClassifierMixin
 import pandas as pd
+import itertools as it
 
 
 # feature_names = list(map(lambda b: b + "_" + grp, features_base))
@@ -12,6 +13,12 @@ import pandas as pd
 
 def extract_features(d: pd.DataFrame, features: List[str]) -> pd.DataFrame:
     return d[features]
+
+
+def all_combis(li: List):
+    for l in range(len(li)):
+        for i in it.combinations(li, l + 1):
+            yield list(i)
 
 
 def extract_labels(d: pd.DataFrame):
@@ -35,15 +42,12 @@ def train_fs(data: pd.DataFrame, features_key: str, features: List[str], clf_key
 
 clfs = {
     "lr": lambda: LogisticRegression(solver='lbfgs', max_iter=1500),
-    "lda_1": lambda: Lda(n_components=None, priors=None, shrinkage=None, solver='svd', store_covariance=False,
-                         tol=0.0001),
-    "lda_2": lambda: Lda(n_components=None, priors=None, shrinkage=None, solver='svd', store_covariance=False,
-                         tol=0.001),
-    "lda_3": lambda: Lda(n_components=None, priors=None, shrinkage=None, solver='svd', store_covariance=False,
-                         tol=0.01),
+    "lda": lambda: Lda(n_components=None, priors=None, shrinkage=None, solver='svd', store_covariance=False,
+                       tol=0.0001),
 }
 
-feature_groups = ["mean", "se", "worst"]
+feature_groups_base = ["mean", "se", "worst"]
+feature_groups = all_combis(feature_groups_base)
 
 feature_base_selection: Dict[str, List[str]] = {
     "all": ["radius", "texture", "perimeter", "area", "smoothness", "compactness", "concavity", "concave_points",
@@ -53,20 +57,29 @@ feature_base_selection: Dict[str, List[str]] = {
     "one_rel": ["radius"],
 }
 
+
+def feature_names(grps: List[str], bases: List[str]) -> List[str]:
+    re = []
+    for grp in grps:
+        for base in bases:
+            re.append("{}_{}".format(base, grp))
+    return re
+
+
+def feature_keys(grps: List[str], base: str, all_grps: bool) -> str:
+    if base == "all" and all_grps:
+        return "all"
+    if all_grps:
+        return "all_{}".format(sel_key)
+    return "{}_{}".format('_'.join(grps), sel_key)
+
+
 feature_sets = {}
-for grp in feature_groups:
+for _grps in feature_groups:
     for sel_key in feature_base_selection.keys():
-        key = "{}_{}".format(grp, sel_key)
-        val = list(map(lambda b: b + "_" + grp, feature_base_selection[sel_key]))
+        key = feature_keys(_grps, sel_key, len(_grps) == len(feature_groups_base))
+        val = feature_names(_grps, feature_base_selection[sel_key])
         feature_sets[key] = val
-
-fall = []
-ba = feature_base_selection["all"]
-for grp in feature_groups:
-    for f in ba:
-        fall.append("{}_{}".format(f, grp))
-
-feature_sets["all"] = fall
 
 _data = pd.read_csv('../data/bc-data.csv', header=0)
 

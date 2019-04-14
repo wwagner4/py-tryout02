@@ -1,4 +1,4 @@
-from itertools import combinations
+import itertools as it
 from typing import List
 
 
@@ -12,9 +12,9 @@ def named_tuples():
 
 
 def all_combinations():
-    def all_combis(li: List[str]):
+    def all_combis(li: List):
         for l in range(len(li)):
-            for i in combinations(li, l + 1):
+            for i in it.combinations(li, l + 1):
                 yield list(i)
 
     # Print the obtained combinations
@@ -24,6 +24,9 @@ def all_combinations():
         print(c)
 
 
-all_combinations()
+f = "_".join(["A", "B", "C"])
+print(f)
+
+# all_combinations()
 
 # named_tuples()
