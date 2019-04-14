@@ -109,3 +109,28 @@ Verwendete Technologie: sklearn.linear_model.LogisticRegression
 #### Naive Bayes
 #### Random Forrest
 #### XGBoost
+
+## Install XGBoost
+ 
+```
+git clone --recursive https://github.com/dmlc/xgboost
+cd xgboost
+make -j4
+ 
+cd in the folder: xgboost/python-package
+ 
+python setup.py install
+```
+ 
+ 
+### Install libgcc
+ 
+```
+conda install libgcc
+```
+ 
+Go to python shell and type:
+ 
+```
+import xgboost as xgb
+```

@@ -13,6 +13,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC, SVC
 from sklearn import preprocessing as pp
 from collections import namedtuple
+import xgboost as xgb
 
 ClfConf = namedtuple("ClfConf", "id clf normalized")
 
@@ -105,6 +106,10 @@ clfs = [
             ),
     ClfConf(id="rf",
             clf=lambda: RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0),
+            normalized=False
+            ),
+    ClfConf(id="xgb",
+            clf=lambda: xgb.XGBClassifier(),
             normalized=False
             ),
 ]
