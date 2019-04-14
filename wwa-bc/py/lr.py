@@ -7,6 +7,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as Lda
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model.base import LinearClassifierMixin
 import sklearn.model_selection as ms
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC, SVC
 from sklearn import preprocessing as pp
 from collections import namedtuple
@@ -91,6 +92,10 @@ clfs = [
                             max_iter=-1, probability=False, random_state=None, shrinking=True,
                             tol=0.001, verbose=False),
             normalized=True
+            ),
+    ClfConf(id="knn",
+            clf=lambda: KNeighborsClassifier(n_neighbors=3),
+            normalized=False
             ),
 ]
 
